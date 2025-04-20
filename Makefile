@@ -27,11 +27,13 @@ BIN = ${OUTPUT_PATH}/os.bin
 
 USE_LINKER_SCRIPT ?= false
 
-ifeq (${USE_LINKER_SCRIPT}, true)
-LDFLAGS = -T ${OUTPUT_PATH}/os.ld.generated
-else
+# ifeq (${USE_LINKER_SCRIPT}, true)
+# LDFLAGS = -T ${OUTPUT_PATH}/os.ld.generated
+# else
+# LDFLAGS = -Ttext=0x80000000
+# endif
+
 LDFLAGS = -Ttext=0x80000000
-endif
 
 .DEFAULT_GOAL := all
 
@@ -40,9 +42,6 @@ $(OUTPUT_PATH):
 	$(MKDIR) ${OUTPUT_PATH}
 
 ${ELF}: ${OBJS}
-ifeq (${USE_LINKER_SCRIPT}, true)
-	${CC} -E -P -x c ${DEFS} ${CFLAGS} os.ld > ${OUTPUT_PATH}/os.ld.generated
-endif
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${ELF} $^
 	${OBJCOPY} -O binary ${ELF} ${BIN}
 

@@ -48,3 +48,9 @@ void uart_puts(const char* s) {
     uart_putc(*s++);
   }
 }
+void uart_getc(char* c) {
+  while (0 == (uart_read_reg(LSR) & LSR_RX_READY)) {
+    ;
+  }
+  *c = uart_read_reg(RHR);
+}
