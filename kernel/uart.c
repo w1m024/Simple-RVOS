@@ -22,7 +22,7 @@
 #define uart_write_reg(reg, value) (*(UART_REG(reg)) = (value))
 
 void uart_init() {
-  // disable interrupts
+  // 关中断
   uart_write_reg(IER, 0x00);
 
   // 设置波特率
@@ -36,22 +36,15 @@ void uart_init() {
   uart_write_reg(LCR, lcr | (3 << 0));
 }
 
-int uart_getc(void) {
-  while (0 == (uart_read_reg(LSR) & LSR_RX_READY))
-    ;
-  return uart_read_reg(RHR);
-}
-
 int uart_putc(int c) {
   while (0 == (uart_read_reg(LSR) & LSR_TX_IDLE)) {
     ;
   }
-  uart_write_reg(THR, c);
-  return c;
+  return uart_write_reg(THR, c);
 }
-int uart_puts(const char* s) {
+
+void uart_puts(const char* s) {
   while (*s) {
     uart_putc(*s++);
   }
-  return 0;
 }

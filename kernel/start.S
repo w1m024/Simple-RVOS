@@ -23,5 +23,4 @@ park:
 .balign 16
 stacks:
     .skip   STACK_SIZE * MAXNUM_CPU
-
     .end
