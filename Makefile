@@ -25,6 +25,14 @@ OBJS = ${OBJS_ASM} ${OBJS_C}
 ELF = ${OUTPUT_PATH}/os.elf
 BIN = ${OUTPUT_PATH}/os.bin
 
+USE_LINKER_SCRIPT ?= false
+
+ifeq (${USE_LINKER_SCRIPT}, true)
+LDFLAGS = -T ${OUTPUT_PATH}/os.ld.generated
+else
+LDFLAGS = -Ttext=0x80000000
+endif
+
 .DEFAULT_GOAL := all
 
 all: $(OUTPUT_PATH) ${ELF} ${BIN}
