@@ -1,5 +1,5 @@
-#include "include/platform.h"
-#include "include/types.h"
+#include "include/os.h"
+
 #define UART_REG(reg) ((volatile uint8_t*)(UART0 + reg))
 
 #define RHR 0  // Receive Holding Register (read mode)

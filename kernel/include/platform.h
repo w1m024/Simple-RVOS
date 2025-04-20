@@ -2,6 +2,7 @@
 #define __PLATFORM_H__
 
 #define MAXNUM_CPU 8
+#define LENGTH_RAM 128 * 1024 * 1024
 
 // static const MemMapEntry virt_memmap[] = {
 //     [VIRT_DEBUG] =        {        0x0,         0x100 },

@@ -25,15 +25,13 @@ OBJS = ${OBJS_ASM} ${OBJS_C}
 ELF = ${OUTPUT_PATH}/os.elf
 BIN = ${OUTPUT_PATH}/os.bin
 
-USE_LINKER_SCRIPT ?= false
+USE_LINKER_SCRIPT ?= true
 
-# ifeq (${USE_LINKER_SCRIPT}, true)
-# LDFLAGS = -T ${OUTPUT_PATH}/os.ld.generated
-# else
-# LDFLAGS = -Ttext=0x80000000
-# endif
-
+ifeq (${USE_LINKER_SCRIPT}, true)
+LDFLAGS = -T ${OUTPUT_PATH}/kernel.ld.generated
+else
 LDFLAGS = -Ttext=0x80000000
+endif
 
 .DEFAULT_GOAL := all
 
@@ -42,6 +40,9 @@ $(OUTPUT_PATH):
 	$(MKDIR) ${OUTPUT_PATH}
 
 ${ELF}: ${OBJS}
+ifeq (${USE_LINKER_SCRIPT}, true)
+	${CC} -E -P -x c ${DEFS} ${CFLAGS} kernel/kernel.ld > ${OUTPUT_PATH}/kernel.ld.generated
+endif
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${ELF} $^
 	${OBJCOPY} -O binary ${ELF} ${BIN}
 
