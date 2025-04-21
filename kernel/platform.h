@@ -13,7 +13,7 @@
 #define MAXNUM_CPU 8
 
 /* used in os.ld */
-#define LENGTH_RAM 128 * 1024 * 1024
+#define LENGTH_RAM 128*1024*1024
 
 /*
  * MemoryMap

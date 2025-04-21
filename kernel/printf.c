@@ -1,9 +1,9 @@
 #include "include/os.h"
+
 /*
  * ref: https://github.com/cccriscv/mini-riscv-os/blob/master/05-Preemptive/lib.c
  */
 
-// 格式化字符
 static int _vsnprintf(char* out, size_t n, const char* s, va_list vl) {
   int format = 0;
   int longarg = 0;
@@ -88,12 +88,11 @@ static int _vsnprintf(char* out, size_t n, const char* s, va_list vl) {
   return pos;
 }
 
-// 串口输出
 static char out_buf[ 1000 ];  // buffer for _vprintf()
 
 static int _vprintf(const char* s, va_list vl) {
   int res = _vsnprintf(NULL, -1, s, vl);
-  if (res + 1 >= sizeof(out_buf)) {  // 防止缓存区溢出
+  if (res + 1 >= sizeof(out_buf)) {
     uart_puts("error: output string size overflow\n");
     while (1) {}
   }
