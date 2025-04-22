@@ -15,7 +15,8 @@ QFLAGS = -nographic -smp 1 -machine virt -bios none
 SRCS_ASM = \
 	start.S
 SRCS_C = \
-	kernel.c 
+	kernel.c \
+	uart.c 
 
 OUTPUT_PATH = build
 
