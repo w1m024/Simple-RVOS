@@ -14,12 +14,15 @@ QFLAGS = -nographic -smp 1 -machine virt -bios none
 
 SRCS_ASM = \
 	start.S \
-	mem.S
+	mem.S \
+	entry.S
+	
 SRCS_C = \
 	kernel.c \
 	uart.c \
 	page.c \
-	printf.c 
+	printf.c \
+	sched.c
 
 OUTPUT_PATH = build
 
