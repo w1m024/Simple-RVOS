@@ -45,7 +45,7 @@ ${OUTPUT_PATH}/%.o: %.S
 	@echo "Assembled $< to $@"
 
 ${ELF}: ${OBJS}
-	${CC} ${CFLAGS} -o $@ ${OBJS} -Ttext=0x80000000
+	${CC} ${CFLAGS} -o $@ ${OBJS} -T kernel.ld
 
 run: all
 	@echo "Press Ctrl-A and then X to exit QEMU"
