@@ -1,7 +1,6 @@
 {
     "editor.formatOnSave": true,
     "files.associations": {
-        "os.h": "c",
         "platform.h": "c",
         "types.h": "c"
     },

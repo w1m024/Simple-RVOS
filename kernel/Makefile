@@ -13,10 +13,13 @@ QEMU = qemu-system-riscv32
 QFLAGS = -nographic -smp 1 -machine virt -bios none
 
 SRCS_ASM = \
-	start.S
+	start.S \
+	mem.S
 SRCS_C = \
 	kernel.c \
-	uart.c 
+	uart.c \
+	page.c \
+	printf.c 
 
 OUTPUT_PATH = build
 
