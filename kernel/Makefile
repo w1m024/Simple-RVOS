@@ -23,7 +23,8 @@ SRCS_C = \
 	page.c \
 	printf.c \
 	sched.c \
-	user.c
+	user.c \
+	trap.c \
 
 OUTPUT_PATH = build
 
