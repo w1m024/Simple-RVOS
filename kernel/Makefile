@@ -22,7 +22,8 @@ SRCS_C = \
 	uart.c \
 	page.c \
 	printf.c \
-	sched.c
+	sched.c \
+	user.c
 
 OUTPUT_PATH = build
 

@@ -57,6 +57,7 @@ struct context {
 
 extern int  task_create(void (*task)(void));
 extern void task_delay(volatile int count);
+extern void task_yield(void);
 
 
 #endif /* __OS_H__ */

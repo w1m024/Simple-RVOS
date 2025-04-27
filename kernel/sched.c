@@ -3,37 +3,47 @@
 /* defined in entry.S */
 extern void switch_to(struct context* next);
 
+#define MAX_TASK_NUM 10
 #define STACK_SIZE 1024
 
-uint8_t __attribute__((aligned(16))) task_stack[ STACK_SIZE ];
-struct context ctx_task;
+uint8_t __attribute__((aligned(16))) task_stack[ MAX_TASK_NUM ][ STACK_SIZE ];
+struct context ctx_task[ MAX_TASK_NUM ];
+
+static int _top = 0;
+static int _current = -1;
 
 static void w_mscratch(reg_t x) { asm volatile("csrw mscratch, %0" : : "r"(x)); }
 
-void user_task0(void);
-void sched_init() {
-  w_mscratch(0);
-
-  ctx_task.sp = (reg_t)&task_stack[ STACK_SIZE ];
-  ctx_task.ra = (reg_t)user_task0;
-}
+void sched_init() { w_mscratch(0); }
 
 void schedule() {
-  struct context* next = &ctx_task;
+  // struct context* next = &ctx_task;
+  if (_top <= 0) {
+    uart_puts("No task to schedule!\n");
+    return;
+  }
+
+  _current = (_current + 1) % _top;
+  struct context* next = &ctx_task[ _current ];
   switch_to(next);
 }
+
+int task_create(void (*start_routin)(void)) {
+  if (_top >= MAX_TASK_NUM) {
+    uart_puts("Task limit reached!\n");
+    return -1;
+  }
+
+  ctx_task[ _top ].sp = (reg_t)&task_stack[ _top ][ STACK_SIZE ];
+  ctx_task[ _top ].ra = (reg_t)start_routin;
+
+  _top++;
+  return 0;
+}
+void task_yield() { schedule(); }
 
 void task_delay(volatile int count) {
   count *= 100000;
   while (count--)
     ;
 }
-
-void user_task0(void) {
-  uart_puts("Task 0: Created!\n");
-  while (1) {
-    uart_puts("Task 0: Running...\n");
-    task_delay(1000);
-  }
-}
-
