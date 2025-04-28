@@ -7,7 +7,7 @@ void task1(void) {
   while (1) {
     uart_puts("Task 1 is running.\n");
 
-    trap_test();
+    // trap_test();
 
     task_delay(DELAY);
     task_yield();
@@ -25,4 +25,5 @@ void os_main(void) {
 
   task_create(task1);
   task_create(task2);
+  
 }

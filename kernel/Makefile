@@ -25,6 +25,8 @@ SRCS_C = \
 	sched.c \
 	user.c \
 	trap.c \
+	plic.c \
+	plic_test.c
 
 OUTPUT_PATH = build
 
