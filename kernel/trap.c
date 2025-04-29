@@ -4,25 +4,23 @@
 extern void trap_vector(void);
 
 extern void uart_isr(void);
+extern void timer_handler(void);
 
 void trap_init(void) {
   uart_puts("trap_init\n");
   w_mtvec((reg_t)trap_vector);
 }
 
-void external_interrupt_handler()
-{
-	int irq = plic_claim();
+void external_interrupt_handler() {
+  int irq = plic_claim();
 
-	if (irq == UART0_IRQ){
-      		uart_isr();
-	} else if (irq) {
-		printf("unexpected interrupt irq = %d\n", irq);
-	}
-	
-	if (irq) {
-		plic_complete(irq);
-	}
+  if (irq == UART0_IRQ) {
+    uart_isr();
+  } else if (irq) {
+    printf("unexpected interrupt irq = %d\n", irq);
+  }
+
+  if (irq) { plic_complete(irq); }
 }
 
 reg_t trap_handler(reg_t epc, reg_t cause) {
@@ -30,16 +28,16 @@ reg_t trap_handler(reg_t epc, reg_t cause) {
   reg_t return_pc = epc;
   reg_t cause_code = cause & MCAUSE_MASK_ECODE;
 
-  uart_puts("enter trap_handler\n");
-  printf("trap_handler cause = %ld\n", cause);
-
-
   if (cause & MCAUSE_MASK_INTERRUPT) {
     // interrupt
     switch (cause_code) {
     case 3: uart_puts("software interruption!\n"); break;
-    case 7: uart_puts("timer interruption!\n"); break;
-    case 11: uart_puts("external interruption!\n");
+    case 7:
+      uart_puts("timer interruption!\n");
+      timer_handler();
+      break;
+    case 11:
+      uart_puts("external interruption!\n");
       external_interrupt_handler();
       break;
     default: printf("Unknown async exception! Code = %ld\n", cause_code); break;

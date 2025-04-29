@@ -8,7 +8,7 @@ extern void schedule(void);
 extern void os_main(void);
 extern void trap_init(void);
 extern void plic_init(void);
-// extern void plic_test(void);
+extern void timer_init(void);
 
 void start_kernel(void) {
   uart_init();
@@ -19,7 +19,8 @@ void start_kernel(void) {
   trap_init();
 
   plic_init();
-  // plic_test();
+
+  timer_init();
 
   sched_init();
 
