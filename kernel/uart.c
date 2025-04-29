@@ -29,6 +29,11 @@ void uart_init(void) {
   uart_write_reg(DLM, 0x00);
 
   uart_write_reg(LCR, 0x03);  // 8 bits, no parity, 1 stop bit
+
+  	/*
+	 * enable receive interrupts.
+	 */
+	uart_write_reg(IER, uart_read_reg(IER) | (1 << 0));
 }
 
 void uart_putc(char ch) {

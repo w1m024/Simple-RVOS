@@ -7,7 +7,6 @@ extern void sched_init(void);
 extern void schedule(void);
 extern void os_main(void);
 extern void trap_init(void);
-extern void trap_test(void);
 extern void plic_init(void);
 // extern void plic_test(void);
 
@@ -18,7 +17,6 @@ void start_kernel(void) {
   page_init();
 
   trap_init();
-  trap_test();
 
   plic_init();
   // plic_test();
