@@ -69,4 +69,17 @@ extern int plic_claim(void);
 // sched.c
 void schedule(void);
 
+
+// lock
+extern int spin_lock(void);
+extern int spin_unlock(void);
+
+// software timer
+struct timer {
+  void (*func)(void* arg);  // 指向回调函数
+  void* arg; // 回调函数参数
+  uint32_t timeout_tick; // 超时时间
+};
+extern struct timer *timer_create(void (*handler)(void* arg), void* arg, uint32_t timeout_tick);
+extern void timer_delete(struct timer* timer);
 #endif /* __OS_H__ */
