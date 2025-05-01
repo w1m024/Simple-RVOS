@@ -1,6 +1,8 @@
 #include "os.h"
 
 void plic_init(void) {
+  uart_puts("plic_init\n");
+  
   int hart = r_tp();
 
   *(uint32_t*)PLIC_PRIORITY(UART0_IRQ) = 1;

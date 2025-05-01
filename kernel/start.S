@@ -9,10 +9,11 @@ _start:
 	mv	tp, t0
 	bnez	t0, park
 
-	// 初始化bss
+	# 初始化bss
 	la	a0, _bss_start
 	la	a1, _bss_end
 	bgeu	a0, a1, 2f 
+
 
 1:	
 	sw zero, (a0)
@@ -20,14 +21,20 @@ _start:
 	bltu	a0, a1, 1b
 
 2:
+	# 初始化栈
 	slli	t0, t0, 10
 	la	sp, stacks + STACK_SIZE
 	add	sp, sp, t0
+
+	# start_kernel末尾会调用mret切换到第一个任务，准备好mstatus
+	li	t0, 3 << 11 | 1 << 7 # MPP=11(M-Mode) & MPIE=1
+	csrs	mstatus, t0
 
 	j	start_kernel
 park:
 	wfi
 	j park
+	
 .balign 16
 stacks:
 	.skip	STACK_SIZE * MAXNUM_CPU

@@ -74,6 +74,7 @@
 .globl trap_vector
 .balign 4
 trap_vector:
+	# 保存上下文
 	csrrw	t6, mscratch, t6
 	reg_save	t6
 
@@ -81,6 +82,11 @@ trap_vector:
 	csrr	t6, mscratch
 	STORE	t6, 30*SIZE_REG(t5)
 
+	# 保存程序计数器mepc
+	csrr	a0, mepc
+	STORE	a0, 31*SIZE_REG(t5)
+
+	# 将上下文指针恢复到mscratch中
 	csrw	mscratch, t5
 
 	csrr	a0, mepc
@@ -89,9 +95,11 @@ trap_vector:
 
 	csrw	mepc, a0
 
+	# 恢复上下文
 	csrr	t6, mscratch
 	reg_restore	t6
 
+	# 返回trap发生前执行的地方
 	mret
 
 
@@ -101,23 +109,17 @@ trap_vector:
 .globl switch_to
 .balign 4
 switch_to:
-	csrrw	t6, mscratch, t6
-	beqz	t6, 1f
-	reg_save t6
+	# mscratch指向下一个任务的上下文
+	csrw	mscratch, a0	
 
+	# mepc为下一个任务的pc
+	LOAD	a1, 31*SIZE_REG(a0)
+	csrw	mepc, a1
 
-	mv	t5, t6
-	csrr	t6, mscratch
-	STORE	t6, 30*SIZE_REG(t5)
-
-1:
-
-	csrw	mscratch, a0
-
-	# Use t6 to point to the context of the new task
+	# 恢复下一个任务的所有通用寄存器
 	mv	t6, a0
-	reg_restore t6
+	reg_restore	t6
 
-	ret
+	mret
 .end
 

@@ -31,7 +31,16 @@ reg_t trap_handler(reg_t epc, reg_t cause) {
   if (cause & MCAUSE_MASK_INTERRUPT) {
     // interrupt
     switch (cause_code) {
-    case 3: uart_puts("software interruption!\n"); break;
+    case 3:
+      uart_puts("software interruption!\n");
+
+      // 表示中断已处理
+      int id = r_mhartid();
+      *(uint32_t*)CLINT_MSIP(id) = 0;
+
+      schedule();
+
+      break;
     case 7:
       uart_puts("timer interruption!\n");
       timer_handler();

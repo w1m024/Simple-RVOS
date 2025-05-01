@@ -54,6 +54,8 @@ struct context {
   reg_t t4;
   reg_t t5;
   reg_t t6;
+
+  reg_t pc; //保存任务被中断时的mepc值，用于回复
 };
 
 extern int task_create(void (*task)(void));
@@ -63,5 +65,8 @@ extern void task_yield(void);
 // plic
 extern void plic_complete(int irq);
 extern int plic_claim(void);
+
+// sched.c
+void schedule(void);
 
 #endif /* __OS_H__ */

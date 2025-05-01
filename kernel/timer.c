@@ -11,6 +11,8 @@ void timer_load(int interval) {
 }
 
 void timer_init(void) {
+  uart_puts("timer_init\n");
+
   timer_load(TIMER_INTERVAL);
 
   w_mie(r_mie() | MIE_MTIE);             // Enable timer interrupt
@@ -19,6 +21,9 @@ void timer_init(void) {
 
 void timer_handler(void) {
   _tick++;
+
   printf("tick %d\n", _tick);
   timer_load(TIMER_INTERVAL);
+
+  schedule();
 }
