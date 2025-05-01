@@ -13,21 +13,21 @@ QEMU = qemu-system-riscv32
 QFLAGS = -nographic -smp 1 -machine virt -bios none
 
 SRCS_ASM = \
-	start.S \
-	mem.S \
-	entry.S
+	kernel/start.S \
+	kernel/mem.S \
+	kernel/entry.S
 	
 SRCS_C = \
-	kernel.c \
-	uart.c \
-	page.c \
-	printf.c \
-	sched.c \
-	user.c \
-	trap.c \
-	plic.c \
-	timer.c \
-	lock.c
+	kernel/kernel.c \
+	kernel/uart.c \
+	kernel/page.c \
+	kernel/printf.c \
+	kernel/sched.c \
+	user/user.c \
+	kernel/trap.c \
+	kernel/plic.c \
+	kernel/timer.c \
+	kernel/lock.c
 
 OUTPUT_PATH = build
 
@@ -47,11 +47,13 @@ ${OUTPUT_PATH}:
 
 ${OUTPUT_PATH}/%.o: %.c
 	@echo "Compiling $<"
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 	@echo "Compiled $< to $@"
 
 ${OUTPUT_PATH}/%.o: %.S
 	@echo "Assembling $<"
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 	@echo "Assembled $< to $@"
 
