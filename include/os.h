@@ -66,10 +66,6 @@ extern void task_yield(void);
 extern void plic_complete(int irq);
 extern int plic_claim(void);
 
-// sched.c
-void schedule(void);
-
-
 // lock
 extern int spin_lock(void);
 extern int spin_unlock(void);

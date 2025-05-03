@@ -2,6 +2,7 @@
     "editor.formatOnSave": true,
     "files.associations": {
         "platform.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "syscall.h": "c"
     },
 }
